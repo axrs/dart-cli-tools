@@ -1,0 +1,12 @@
+name: DartCliTest
+
+dependencies:
+  build_runner: ^1.12.0
+  console: ^4.1.0
+  dolumns: ^1.2.0
+  reflectable: ^3.0.0
+  smart_arg:
+    git: https://github.com/axrs/smart_arg.git
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
