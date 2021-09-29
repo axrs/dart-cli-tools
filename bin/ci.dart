@@ -41,7 +41,7 @@ final colorizeRow = (String status, String value) {
       style = Styles.GREEN;
       break;
   }
-  return new Colorize(value).apply(style).toString();
+  return new Colorize(value ?? '').apply(style).toString();
 };
 
 List<Cell> buildEntryToTableCells(CI.Build entry) {
