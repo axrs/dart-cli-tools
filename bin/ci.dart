@@ -1,4 +1,5 @@
 import 'dart:io' show exit;
+
 import 'package:barbecue/barbecue.dart';
 import 'package:collection/collection.dart';
 import 'package:colorize/colorize.dart';
@@ -8,6 +9,7 @@ import 'package:io_axrs_dart_cli_tools/ansi.dart';
 import 'package:io_axrs_dart_cli_tools/ci.dart' as CI;
 import 'package:io_axrs_dart_cli_tools/circleci/impl.dart';
 import 'package:smart_arg/smart_arg.dart';
+
 import 'ci.reflectable.dart';
 
 @SmartArg.reflectable
@@ -32,16 +34,21 @@ class CiArgs extends SmartArg {
 }
 
 final colorizeRow = (String status, String value) {
-  dynamic style = '';
+  if (value == null) {
+    return '';
+  }
   switch (status) {
     case "failed":
-      style = Styles.RED;
+      value = new Colorize(value).red().toString();
       break;
     case "success":
-      style = Styles.GREEN;
+      value = new Colorize(value).green().toString();
+      break;
+    case "not_run":
+      value = new Colorize(value).lightGray().toString();
       break;
   }
-  return new Colorize(value ?? '').apply(style).toString();
+  return value;
 };
 
 List<Cell> buildEntryToTableCells(CI.Build entry) {
@@ -52,7 +59,7 @@ List<Cell> buildEntryToTableCells(CI.Build entry) {
     entry.getJobName(),
     currentStatus,
     prettyDuration(
-      Duration(milliseconds: entry.getBuildTime()),
+      Duration(milliseconds: entry.getBuildTime() ?? 0),
       abbreviated: true,
     ),
     entry.getCommitSubject(),
