@@ -21,7 +21,7 @@ class CiArgs extends SmartArg {
   String circleciApiKey;
 
   @IntegerArgument(
-    help: 'Limit',
+    help: 'Number of recent CI Builds to limit to. Defaults to 30.',
     minimum: 1,
     maximum: 100,
   )
@@ -77,8 +77,7 @@ Cell toTableCell(String v) => Cell(v);
 
 CiArgs _readArgs(List<String> arguments) {
   initializeReflectable();
-  var args = CiArgs()
-    ..parse(arguments);
+  var args = CiArgs()..parse(arguments);
   if (args.help) {
     print(args.usage());
     exit(0);
