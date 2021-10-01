@@ -5,8 +5,10 @@ import 'package:collection/collection.dart';
 import 'package:colorize/colorize.dart';
 import 'package:duration/duration.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:get_it/get_it.dart';
 import 'package:io_axrs_dart_cli_tools/ansi.dart';
 import 'package:io_axrs_dart_cli_tools/ci.dart' as CI;
+import 'package:io_axrs_dart_cli_tools/circle_ci_api_key_argument.dart';
 import 'package:io_axrs_dart_cli_tools/circleci/impl.dart';
 import 'package:smart_arg/smart_arg.dart';
 
@@ -15,7 +17,7 @@ import 'ci.reflectable.dart';
 @SmartArg.reflectable
 @Parser(description: 'Continuous Integration CLI Helper')
 class CiArgs extends SmartArg {
-  @StringArgument(
+  @CircleCiApiKeyArgument(
     help: 'CircleCI API Key',
     isRequired: true,
     environmentVariable: 'CIRCLECI_API_KEY',
@@ -39,13 +41,13 @@ final colorizeRow = (String status, String value) {
   }
   switch (status) {
     case "failed":
-      value = new Colorize(value).red().toString();
+      value = Colorize(value).red().toString();
       break;
     case "success":
-      value = new Colorize(value).green().toString();
+      value = Colorize(value).green().toString();
       break;
     case "not_run":
-      value = new Colorize(value).lightGray().toString();
+      value = Colorize(value).lightGray().toString();
       break;
   }
   return value;
@@ -94,7 +96,7 @@ CiArgs _readArgs(List<String> arguments) {
 
 void main(List<String> arguments) async {
   var args = _readArgs(arguments);
-  var ci = new CircleCi(args.circleciApiKey);
+  var ci = GetIt.instance<CI.Service>();
   List<CI.Build> builds = await ci.fetchBuilds(args.limit);
   var rows = groupBy(builds, CI.buildWorkflowId)
       .entries

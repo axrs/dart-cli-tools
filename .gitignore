@@ -24,3 +24,6 @@ doc/api/
 # IDE Settings
 .idea/
 *.iml
+
+# Compiled executables
+*.exe
