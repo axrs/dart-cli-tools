@@ -8,6 +8,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:get_it/get_it.dart';
 import 'package:io_axrs_dart_cli_tools/ansi.dart';
 import 'package:io_axrs_dart_cli_tools/ci.dart' as CI;
+import 'package:io_axrs_dart_cli_tools/circle_ci_api_key_argument.dart';
 import 'package:io_axrs_dart_cli_tools/circleci/impl.dart';
 import 'package:smart_arg/smart_arg.dart';
 
@@ -16,7 +17,7 @@ import 'ci.reflectable.dart';
 @SmartArg.reflectable
 @Parser(description: 'Continuous Integration CLI Helper')
 class CiArgs extends SmartArg {
-  @StringArgument(
+  @CircleCiApiKeyArgument(
     help: 'CircleCI API Key',
     isRequired: true,
     environmentVariable: 'CIRCLECI_API_KEY',
@@ -40,13 +41,13 @@ final colorizeRow = (String status, String value) {
   }
   switch (status) {
     case "failed":
-      value = new Colorize(value).red().toString();
+      value = Colorize(value).red().toString();
       break;
     case "success":
-      value = new Colorize(value).green().toString();
+      value = Colorize(value).green().toString();
       break;
     case "not_run":
-      value = new Colorize(value).lightGray().toString();
+      value = Colorize(value).lightGray().toString();
       break;
   }
   return value;
@@ -90,7 +91,6 @@ CiArgs _readArgs(List<String> arguments) {
     print(args.usage());
     exit(0);
   }
-  GetIt.instance.registerSingleton(new CircleCi(args.circleciApiKey));
   return args;
 }
 

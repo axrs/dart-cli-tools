@@ -77,9 +77,7 @@ class CircleCi implements CI.Service {
     var response = await request.close();
     List<dynamic> body =
         await response.transform(Utf8Decoder()).transform(json.decoder).first;
-    return body
-        .map<CI.Build>((json) => CircleCiBuild.fromJson(json))
-        .toList();
+    return body.map<CI.Build>((json) => CircleCiBuild.fromJson(json)).toList();
   }
 
   Uri _getRecentBuildsUrl({int limit = 30}) {
