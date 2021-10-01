@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:colorize/colorize.dart';
 import 'package:duration/duration.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:get_it/get_it.dart';
 import 'package:io_axrs_dart_cli_tools/ansi.dart';
 import 'package:io_axrs_dart_cli_tools/ci.dart' as CI;
 import 'package:io_axrs_dart_cli_tools/circleci/impl.dart';
@@ -89,12 +90,13 @@ CiArgs _readArgs(List<String> arguments) {
     print(args.usage());
     exit(0);
   }
+  GetIt.instance.registerSingleton(new CircleCi(args.circleciApiKey));
   return args;
 }
 
 void main(List<String> arguments) async {
   var args = _readArgs(arguments);
-  var ci = new CircleCi(args.circleciApiKey);
+  var ci = GetIt.instance<CI.Service>();
   List<CI.Build> builds = await ci.fetchBuilds(args.limit);
   var rows = groupBy(builds, CI.buildWorkflowId)
       .entries
