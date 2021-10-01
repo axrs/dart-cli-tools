@@ -7,6 +7,7 @@ dependencies:
   colorize: ^3.0.0
   duration: ^3.0.6
   fpdart: ^0.0.11
+  get_it: ^7.2.0
   reflectable: ^3.0.0
   smart_arg:
     git: https://github.com/axrs/smart_arg.git
